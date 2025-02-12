@@ -1,0 +1,10 @@
+name: foxtrail-frontend
+services:
+- name: web
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: arethefreshest/foxtrail
+  source_dir: frontend
+  dockerfile_path: Dockerfile
+  http_port: 3000 

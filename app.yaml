@@ -1,0 +1,19 @@
+name: foxtrail-ai
+services:
+- name: backend
+  source_dir: backend
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: arethefreshest/foxtrail
+  dockerfile_path: backend/Dockerfile
+  http_port: 8000
+
+- name: frontend
+  source_dir: frontend
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: arethefreshest/foxtrail
+  dockerfile_path: frontend/Dockerfile
+  http_port: 3000 

@@ -1,0 +1,10 @@
+name: foxtrail-backend
+services:
+- name: api
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: arethefreshest/foxtrail
+  source_dir: backend
+  dockerfile_path: Dockerfile
+  http_port: 8000 
