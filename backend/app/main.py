@@ -7,7 +7,12 @@ from .core.logging import logger
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
-    version=settings.VERSION
+    version=settings.VERSION,
+    root_path="/api",
+    # Add OpenAPI configuration
+    openapi_url="/v1/openapi.json",
+    docs_url="/v1/docs",
+    redoc_url="/v1/redoc"
 )
 
 @app.middleware("http")
@@ -44,11 +49,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include routers with explicit prefixes
-app.include_router(auth.router, prefix="/v1/auth", tags=["auth"])
-app.include_router(content.router, prefix="/v1/content", tags=["content"])
-app.include_router(quiz.router, prefix="/v1/quiz", tags=["quiz"])
-app.include_router(search.router, prefix="/v1/search", tags=["search"])
+# Update router prefixes to not include /v1 since it's in API_V1_STR
+app.include_router(auth.router, prefix=f"{settings.API_V1_STR}/auth", tags=["auth"])
+app.include_router(content.router, prefix=f"{settings.API_V1_STR}/content", tags=["content"])
+app.include_router(quiz.router, prefix=f"{settings.API_V1_STR}/quiz", tags=["quiz"])
+app.include_router(search.router, prefix=f"{settings.API_V1_STR}/search", tags=["search"])
 
 @app.get("/")
 async def root():
