@@ -13,7 +13,7 @@ import logging
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
-@router.post("/search", response_model=SearchResponse)
+@router.post("/", response_model=SearchResponse)
 async def search_topics(
     query: SearchQuery,
     db: Session = Depends(get_db)
