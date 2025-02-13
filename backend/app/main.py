@@ -1,9 +1,17 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from .api.endpoints import auth, content, quiz
 from .core.config import settings
+from .core.logging import logger
 
 app = FastAPI(title=settings.PROJECT_NAME, version=settings.VERSION)
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    logger.debug(f"Request: {request.method} {request.url}")
+    response = await call_next(request)
+    logger.debug(f"Response: {response.status_code}")
+    return response
 
 # Configure CORS
 origins = [settings.FRONTEND_URL] if settings.FRONTEND_URL else ["*"]
