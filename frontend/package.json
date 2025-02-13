@@ -17,6 +17,7 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-router-dom": "^6.29.0",
+        "react-scripts": "5.0.1",
         "tailwindcss": "^4.0.6",
         "typescript": "^5.3.3",
         "vis-network": "^9.1.9"
@@ -46,6 +47,7 @@
         ]
     },
     "devDependencies": {
-        "@types/lodash": "^4.17.15"
+        "@types/lodash": "^4.17.15",
+        "eslint-config-react-app": "^7.0.1"
     }
 }
