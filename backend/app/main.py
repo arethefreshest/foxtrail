@@ -8,10 +8,11 @@ from .core.logging import logger
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
-    # Remove the settings.API_V1_STR prefix from docs paths
-    docs_url="/docs",
-    redoc_url="/redoc",
-    openapi_url="/openapi.json"
+    root_path="/api",
+    # Add OpenAPI configuration with v1 prefix
+    docs_url=f"{settings.API_V1_STR}/docs",
+    redoc_url=f"{settings.API_V1_STR}/redoc",
+    openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
 
 @app.middleware("http")
@@ -48,11 +49,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Remove the settings.API_V1_STR prefix from router paths since DO handles /api
-app.include_router(auth.router, prefix="/auth", tags=["auth"])
-app.include_router(content.router, prefix="/content", tags=["content"])
-app.include_router(quiz.router, prefix="/quiz", tags=["quiz"])
-app.include_router(search.router, prefix="/search", tags=["search"])
+# Add v1 prefix to router paths
+app.include_router(auth.router, prefix=f"{settings.API_V1_STR}/auth", tags=["auth"])
+app.include_router(content.router, prefix=f"{settings.API_V1_STR}/content", tags=["content"])
+app.include_router(quiz.router, prefix=f"{settings.API_V1_STR}/quiz", tags=["quiz"])
+app.include_router(search.router, prefix=f"{settings.API_V1_STR}/search", tags=["search"])
 
 @app.get("/")
 async def root():
