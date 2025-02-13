@@ -1,17 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './index.css';
+import Search from './pages/Search';
+import LearningPath from './pages/LearningPath';
+import Quiz from './pages/Quiz';
 
 const App = () => {
   return (
-    <div style={{ 
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      height: '100vh',
-      fontFamily: 'Arial, sans-serif'
-    }}>
-      <h1>Welcome to FoxTrail AI</h1>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Search />} />
+        <Route path="/learning-path" element={<LearningPath />} />
+        <Route path="/quiz/:contentId" element={<Quiz />} />
+      </Routes>
+    </Router>
   );
 };
 

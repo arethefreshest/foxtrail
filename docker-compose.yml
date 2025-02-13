@@ -7,10 +7,18 @@ services:
       - "8000:8000"
     environment:
       - PORT=8000
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis
 
   frontend:
     build: ./frontend
     ports:
       - "3000:3000"
     depends_on:
-      - backend 
+      - backend
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379" 

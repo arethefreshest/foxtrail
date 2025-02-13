@@ -1,0 +1,42 @@
+/* Y2K Minimalist Theme */
+:root {
+  --primary-gradient: linear-gradient(135deg, #818cf8 0%, #8b5cf6 100%);
+  --secondary-gradient: linear-gradient(135deg, #e879f9 0%, #d946ef 100%);
+  --surface-gradient: linear-gradient(135deg, #f5f3ff 0%, #fdf4ff 100%);
+}
+
+.y2k-card {
+  backdrop-filter: blur(12px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: var(--surface-gradient);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+}
+
+.y2k-text-gradient {
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.y2k-button {
+  background: var(--primary-gradient);
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.y2k-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.achievement-card, .recommendation-card {
+  transition: all 0.3s ease;
+}
+
+.achievement-card:hover, .recommendation-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(139, 92, 246, 0.2);
+} 
