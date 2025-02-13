@@ -12,13 +12,14 @@ app = FastAPI(
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
-    logger.info(f"Request: {request.method} {request.url}")
-    logger.debug(f"Headers: {dict(request.headers)}")
+    logger.info(f"Incoming Request: {request.method} {request.url.path}")
+    logger.info(f"Full URL: {request.url}")
+    logger.info(f"Headers: {dict(request.headers)}")
     
     try:
         body = await request.body()
         if body:
-            logger.debug(f"Body: {body.decode()}")
+            logger.info(f"Request Body: {body.decode()}")
     except Exception as e:
         logger.error(f"Error reading body: {e}")
 
@@ -31,28 +32,31 @@ origins = [
     settings.FRONTEND_URL,
     "https://foxtrailai.com",
     "http://localhost:3000",
-    "http://localhost:8080"
+    "http://localhost:8080",
+    "*"  # Temporarily allow all origins for testing
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
-    expose_headers=["*"],
-    max_age=600,
 )
 
-# Include routers
-app.include_router(auth.router, prefix=f"{settings.API_V1_STR}/auth", tags=["auth"])
-app.include_router(content.router, prefix=f"{settings.API_V1_STR}/content", tags=["content"])
-app.include_router(quiz.router, prefix=f"{settings.API_V1_STR}/quiz", tags=["quiz"])
-app.include_router(search.router, prefix=f"{settings.API_V1_STR}/search", tags=["search"])
+# Include routers with explicit prefixes
+app.include_router(auth.router, prefix="/v1/auth", tags=["auth"])
+app.include_router(content.router, prefix="/v1/content", tags=["content"])
+app.include_router(quiz.router, prefix="/v1/quiz", tags=["quiz"])
+app.include_router(search.router, prefix="/v1/search", tags=["search"])
 
 @app.get("/")
 async def root():
-    return {"message": f"Welcome to {settings.PROJECT_NAME} API"}
+    return {
+        "message": f"Welcome to {settings.PROJECT_NAME} API",
+        "version": settings.VERSION,
+        "environment": settings.ENVIRONMENT
+    }
 
 @app.get("/health")
 async def health_check():
@@ -62,7 +66,7 @@ async def health_check():
         "environment": settings.ENVIRONMENT
     }
 
-# Add a debug endpoint to help us see the actual paths
+# Debug endpoint
 @app.get("/debug-paths")
 async def debug_paths():
     routes = []
