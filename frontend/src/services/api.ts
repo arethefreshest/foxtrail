@@ -3,7 +3,7 @@ import { LearningPathData } from '../types/learningPath';
 import { UserAchievement, Achievement } from '../types/achievement';
 import { Recommendation, DifficultyRecommendation } from '../types/recommendation';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api/v1';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api/v1';
 
 export const apiClient = axios.create({
   baseURL: API_URL,
@@ -27,19 +27,20 @@ interface SearchResult {
   categories: string[];
 }
 
-export const searchTopics = async (query: string): Promise<SearchResult> => {
+export const searchTopics = async (query: string) => {
   try {
-    const response = await apiClient.post('/search', {
+    const response = await axios.post(`${API_URL}/search`, {
       query,
-      generateContent: true // Enable AI content generation
+      generateContent: true
     });
-    
+    console.log('Search response:', response.data);
     return {
       existingContent: response.data.existingContent,
       generatedContent: response.data.generatedContent,
       categories: response.data.categories
     };
   } catch (error) {
+    console.error('Search error:', error);
     throw error;
   }
 };

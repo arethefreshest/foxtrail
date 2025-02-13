@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from .api.endpoints import auth, content, quiz
+from .api.endpoints import auth, content, quiz, search
 from .core.config import settings
 from .core.logging import logger
 
@@ -28,6 +28,7 @@ app.add_middleware(
 app.include_router(auth.router, prefix=f"{settings.API_V1_STR}/auth", tags=["auth"])
 app.include_router(content.router, prefix=f"{settings.API_V1_STR}/content", tags=["content"])
 app.include_router(quiz.router, prefix=f"{settings.API_V1_STR}/quiz", tags=["quiz"])
+app.include_router(search.router, prefix=f"{settings.API_V1_STR}/search", tags=["search"])
 
 @app.get("/")
 async def root():

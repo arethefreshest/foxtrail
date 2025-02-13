@@ -8,10 +8,17 @@ interface SearchBarProps {
 
 export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, isLoading }) => {
   const [query, setQuery] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
   const debouncedSearch = useCallback(
-    debounce((searchQuery: string) => {
-      onSearch(searchQuery);
+    debounce(async (searchQuery: string) => {
+      try {
+        setError(null);
+        await onSearch(searchQuery);
+      } catch (err) {
+        console.error('Search failed:', err);
+        setError('Search failed. Please try again.');
+      }
     }, 300),
     []
   );
@@ -23,13 +30,16 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, isLoading }) => 
         value={query}
         onChange={(e) => {
           setQuery(e.target.value);
-          debouncedSearch(e.target.value);
+          if (e.target.value.trim()) {
+            debouncedSearch(e.target.value);
+          }
         }}
         className="search-input"
         placeholder="Search for topics..."
         disabled={isLoading}
       />
       {isLoading && <div className="search-loader" />}
+      {error && <div className="search-error">{error}</div>}
     </div>
   );
 }; 

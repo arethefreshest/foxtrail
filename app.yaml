@@ -43,4 +43,4 @@ services:
     envs:
       - key: REACT_APP_API_URL
         scope: BUILD_TIME
-        value: ${API_URL} 
+        value: https://foxtrailai.com/api/v1 

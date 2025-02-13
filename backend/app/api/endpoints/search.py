@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List, Dict
-from ..database.connection import get_db
-from ..services.ai_service import AIService
-from ..services.quiz_generator import QuizGenerator
-from ..models.category import Category
-from ..models.content import Content
-from ..schemas.search_schema import SearchQuery, SearchResponse
+from ...database.connection import get_db
+from ...services.ai_service import AIService
+from ...services.quiz_generator import QuizGenerator
+from ...models.category import Category
+from ...models.content import Content
+from ...schemas.search_schema import SearchQuery, SearchResponse
 import logging
 
 router = APIRouter()
