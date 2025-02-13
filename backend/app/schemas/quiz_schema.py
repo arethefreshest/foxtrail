@@ -16,7 +16,7 @@ class QuizResponse(QuizBase):
     updated_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class QuizSubmission(BaseModel):
     answers: Dict[str, str]
@@ -28,4 +28,4 @@ class QuizResultResponse(BaseModel):
     feedback: str
 
     class Config:
-        orm_mode = True 
+        from_attributes = True 

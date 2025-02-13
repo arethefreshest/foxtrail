@@ -20,4 +20,4 @@ class ContentResponse(ContentBase):
     category: Optional[CategoryResponse]
 
     class Config:
-        orm_mode = True 
+        from_attributes = True 
