@@ -1,13 +1,13 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.routing import APIRoute
 from .api.endpoints import auth, content, quiz, search
 from .core.config import settings
 from .core.logging import logger
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
-    version=settings.VERSION,
-    root_path="/api"
+    version=settings.VERSION
 )
 
 @app.middleware("http")
@@ -61,3 +61,16 @@ async def health_check():
         "version": settings.VERSION,
         "environment": settings.ENVIRONMENT
     }
+
+# Add a debug endpoint to help us see the actual paths
+@app.get("/debug-paths")
+async def debug_paths():
+    routes = []
+    for route in app.routes:
+        if isinstance(route, APIRoute):
+            routes.append({
+                "path": route.path,
+                "methods": list(route.methods),
+                "name": route.name
+            })
+    return {"routes": routes}
