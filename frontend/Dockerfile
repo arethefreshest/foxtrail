@@ -2,7 +2,10 @@ FROM node:18-alpine
 
 WORKDIR /app
 
+# Clear npm cache and install dependencies
 COPY package*.json ./
+RUN npm cache clean --force
+RUN npm install --legacy-peer-deps ajv
 RUN npm install --legacy-peer-deps
 
 COPY . .
