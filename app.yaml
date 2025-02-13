@@ -10,6 +10,9 @@ services:
       repo: arethefreshest/foxtrail
     dockerfile_path: backend/Dockerfile
     http_port: 8080
+    routes:
+      - path: /api
+        preserve_path_prefix: true
     run_command: uvicorn app.main:app --host 0.0.0.0 --port 8080
     envs:
       - key: DATABASE_URL
@@ -38,6 +41,8 @@ services:
       repo: arethefreshest/foxtrail
     dockerfile_path: frontend/Dockerfile
     http_port: 8080
+    routes:
+      - path: /
     build_command: npm run build
     run_command: serve -s build -l 8080
     envs:

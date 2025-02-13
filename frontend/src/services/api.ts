@@ -4,13 +4,28 @@ import { UserAchievement, Achievement } from '../types/achievement';
 import { Recommendation, DifficultyRecommendation } from '../types/recommendation';
 
 const API_URL = process.env.REACT_APP_API_URL || 'https://foxtrailai.com/api/v1';
+console.log('Environment:', process.env.NODE_ENV);
 console.log('API_URL:', API_URL);
 
+// Add additional headers for debugging
 export const apiClient = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
+    'X-Client-Version': '1.0',
   },
+});
+
+// Add request interceptor to log full request details
+apiClient.interceptors.request.use((config) => {
+  console.log('Full request config:', {
+    url: config.url,
+    method: config.method,
+    baseURL: config.baseURL,
+    headers: config.headers,
+    data: config.data
+  });
+  return config;
 });
 
 // Add auth interceptor

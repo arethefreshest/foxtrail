@@ -4,7 +4,11 @@ from .api.endpoints import auth, content, quiz, search
 from .core.config import settings
 from .core.logging import logger
 
-app = FastAPI(title=settings.PROJECT_NAME, version=settings.VERSION)
+app = FastAPI(
+    title=settings.PROJECT_NAME,
+    version=settings.VERSION,
+    root_path="/api"
+)
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
@@ -52,4 +56,8 @@ async def root():
 
 @app.get("/health")
 async def health_check():
-    return {"status": "healthy"}
+    return {
+        "status": "healthy",
+        "version": settings.VERSION,
+        "environment": settings.ENVIRONMENT
+    }
