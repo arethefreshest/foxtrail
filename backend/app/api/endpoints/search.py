@@ -10,8 +10,6 @@ from ...schemas.search_schema import SearchQuery, SearchResponse
 import logging
 
 router = APIRouter()
-ai_service = AIService()
-quiz_generator = QuizGenerator(ai_service)
 logger = logging.getLogger(__name__)
 
 @router.post("/search", response_model=SearchResponse)
@@ -21,6 +19,10 @@ async def search_topics(
 ):
     logger.info(f"Searching for topic: {query.query}")
     try:
+        # Initialize services
+        ai_service = AIService()
+        quiz_generator = QuizGenerator(ai_service)
+        
         # Search existing content
         existing_content = db.query(Content).filter(
             Content.title.ilike(f"%{query.query}%")
