@@ -11,4 +11,6 @@ COPY --from=builder /usr/local/bin/ /usr/local/bin/
 COPY . .
 
 ENV PYTHONPATH=/app
+ENV DIGITAL_OCEAN_APP_PLATFORM=true
+
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "4"] 
