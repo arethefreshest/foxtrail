@@ -8,20 +8,36 @@ app = FastAPI(title=settings.PROJECT_NAME, version=settings.VERSION)
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
-    logger.debug(f"Request: {request.method} {request.url}")
+    logger.info(f"Request: {request.method} {request.url}")
+    logger.debug(f"Headers: {dict(request.headers)}")
+    
+    try:
+        body = await request.body()
+        if body:
+            logger.debug(f"Body: {body.decode()}")
+    except Exception as e:
+        logger.error(f"Error reading body: {e}")
+
     response = await call_next(request)
-    logger.debug(f"Response: {response.status_code}")
+    logger.info(f"Response Status: {response.status_code}")
     return response
 
-# Configure CORS
-origins = [settings.FRONTEND_URL] if settings.FRONTEND_URL else ["*"]
+# Update CORS configuration
+origins = [
+    settings.FRONTEND_URL,
+    "https://foxtrailai.com",
+    "http://localhost:3000",
+    "http://localhost:8080"
+]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
+    expose_headers=["*"],
+    max_age=600,
 )
 
 # Include routers

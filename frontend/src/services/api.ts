@@ -3,7 +3,8 @@ import { LearningPathData } from '../types/learningPath';
 import { UserAchievement, Achievement } from '../types/achievement';
 import { Recommendation, DifficultyRecommendation } from '../types/recommendation';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api/v1';
+const API_URL = process.env.REACT_APP_API_URL || 'https://foxtrailai.com/api/v1';
+console.log('API_URL:', API_URL);
 
 export const apiClient = axios.create({
   baseURL: API_URL,
@@ -21,6 +22,38 @@ apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   return config;
 });
 
+// Add axios interceptors for debugging
+axios.interceptors.request.use(
+  (config) => {
+    console.log('Request:', {
+      url: config.url,
+      method: config.method,
+      data: config.data,
+      headers: config.headers
+    });
+    return config;
+  },
+  (error) => {
+    console.error('Request Error:', error);
+    return Promise.reject(error);
+  }
+);
+
+axios.interceptors.response.use(
+  (response) => {
+    console.log('Response:', {
+      status: response.status,
+      data: response.data,
+      headers: response.headers
+    });
+    return response;
+  },
+  (error) => {
+    console.error('Response Error:', error.response || error);
+    return Promise.reject(error);
+  }
+);
+
 interface SearchResult {
   existingContent: any[];
   generatedContent: any[];
@@ -29,6 +62,7 @@ interface SearchResult {
 
 export const searchTopics = async (query: string) => {
   try {
+    console.log('Making request to:', `${API_URL}/search`);
     const response = await axios.post(`${API_URL}/search`, {
       query,
       generateContent: true
@@ -41,6 +75,10 @@ export const searchTopics = async (query: string) => {
     };
   } catch (error) {
     console.error('Search error:', error);
+    console.error('Request details:', {
+      url: `${API_URL}/search`,
+      data: { query, generateContent: true }
+    });
     throw error;
   }
 };
